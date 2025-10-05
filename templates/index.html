@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Requirement Engineering Tool</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .container { background: #f5f5f5; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        textarea { width: 100%; height: 120px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background: #007bff; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .output { background: white; padding: 15px; border-radius: 4px; margin-top: 10px; border-left: 4px solid #007bff; }
+        .loading { text-align: center; color: #666; }
+        .error { color: #dc3545; background: #f8d7da; padding: 10px; border-radius: 4px; }
+        h1 { color: #333; text-align: center; }
+        h2 { color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 5px; }
+        pre { white-space: pre-wrap; font-family: inherit; }
+    </style>
+</head>
+<body>
+    <h1>🤖 AI-Powered Requirement Engineering Tool</h1>
+    
+    <div class="container">
+        <h2>Business Requirement Input</h2>
+        <textarea id="requirement" placeholder="Enter your business requirement here...
+
+Example: 
+We need a user authentication system for our e-commerce platform. Users should be able to register, login, reset passwords, and manage their profiles. The system should be secure and support social media login options."></textarea>
+        <br><br>
+        <button onclick="processRequirement()" id="processBtn">🚀 Generate Technical Specifications</button>
+    </div>
+
+    <div id="loading" class="loading" style="display: none;">
+        <p>🔄 Multi-agent AI system processing your requirement...</p>
+        <p>🤖 Technical Analyst → Solutions Architect → Product Owner → UX Designer → QA Lead → Business Analyst → Security Expert</p>
+        <p>⏱️ This may take 60-90 seconds for comprehensive analysis.</p>
+    </div>
+
+    <div id="results" style="display: none;">
+        <div class="container">
+            <h2>📋 Technical Specification</h2>
+            <div id="techSpec" class="output"></div>
+        </div>
+
+        <div class="container">
+            <h2>📝 User Stories</h2>
+            <div id="userStories" class="output"></div>
+        </div>
+
+        <div class="container">
+            <h2>✅ Multi-Agent Validation Report</h2>
+            <div id="validation" class="output"></div>
+        </div>
+
+        <div class="container">
+            <h2>📊 A/B Testing Results</h2>
+            <div id="abTesting" class="output"></div>
+        </div>
+    </div>
+
+    <div id="error" class="error" style="display: none;"></div>
+
+    <script>
+        async function processRequirement() {
+            const requirement = document.getElementById('requirement').value.trim();
+            
+            if (!requirement) {
+                showError('Please enter a business requirement.');
+                return;
+            }
+
+            const processBtn = document.getElementById('processBtn');
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+            const error = document.getElementById('error');
+
+            // Reset UI
+            processBtn.disabled = true;
+            loading.style.display = 'block';
+            results.style.display = 'none';
+            error.style.display = 'none';
+
+            try {
+                const response = await fetch('/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ requirement: requirement })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('techSpec').innerHTML = `<pre>${data.technical_specification}</pre>`;
+                    document.getElementById('userStories').innerHTML = `<pre>${data.user_stories}</pre>`;
+                    document.getElementById('validation').innerHTML = `<pre>${data.validation}</pre>`;
+                    document.getElementById('abTesting').innerHTML = `<pre>${data.ab_testing}</pre>`;
+                    results.style.display = 'block';
+                } else {
+                    showError(data.error || 'An error occurred while processing your request.');
+                }
+            } catch (err) {
+                showError('Network error. Please check your connection and try again.');
+            } finally {
+                processBtn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+
+        function showError(message) {
+            const error = document.getElementById('error');
+            error.textContent = message;
+            error.style.display = 'block';
+        }
+
+        // Allow Enter key to submit
+        document.getElementById('requirement').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                processRequirement();
+            }
+        });
+    </script>
+</body>
+</html>
