@@ -686,6 +686,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Built with ❤️ by [Jammithri](https://github.com/Jammithri)**
+**Built by [Jammithri](https://github.com/Jammithri)**
 
 *Transforming requirement engineering through AI collaboration*
